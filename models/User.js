@@ -9,18 +9,18 @@ const UserSchema = new Schema (
             trimmed: true,
         },
         email: {
-            type: string,
+            type: String,
             required: [true, "Email required"],
             unique: true,
             lowercase: true,  
             match: [/.+\@.+\..+/, 'email is not valid']
         },
         thoughts: [{
-            type: 'Schema.Type.ObjectId',
+            type: Schema.Types.ObjectId,
             ref: 'Thought'
         }],
         friends:[{
-            type: Schema.Type.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User'
         }],
     },

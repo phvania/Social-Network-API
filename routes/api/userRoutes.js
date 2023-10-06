@@ -4,7 +4,7 @@ router.use('/api',apiRoutes)
 
 const {
   getUsers,
-  getSingleuser,
+  getSingleUser,
   createUser,
   deleteUser,
   addFriend,
