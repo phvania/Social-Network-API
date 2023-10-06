@@ -29,6 +29,14 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
+      const user = await User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $push: { thoughts: thought._id } },
+        { new: true }
+      )
+      if (!user) {
+        return res.status(404).json("Error, no user with that username")
+      }
       res.json(thought);
     } catch (err) {
       console.log(err);
@@ -68,4 +76,55 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-};
+  //add reaction
+  async addReaction(req,res) {
+    try{
+      const thought = await Thought.findOneAndUpdate(
+        {_id: req.params.thoughtId},
+        {$addToSet: {reactions: body}},
+        { runValidators: true, new: true }
+      );
+      
+      if (!thought) {
+        res.status(404).json({ message: 'No thought with this id!' });
+      }
+
+      res.json(thought);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  //delete a reaction
+  async deleteReaction(req, res) {
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        {_id: req.params.thoughtId},
+        {$pull: {reactions: body}},
+        { runValidators: true, new: true }
+      );
+      
+      if (!thought) {
+        res.status(404).json({ message: 'No thought with this id!' });
+      }
+
+      res.json(thought);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+      
+    }
+  
+
+
+
+
+
+
+
+
+      
+    
+  
+

@@ -4,7 +4,7 @@ module.exports = {
     // Get all users
     async getUsers(req, res) {
       try {
-        const users = await Users.find();
+        const users = await User.find();
   
         res.json(users);
       } catch (err) {
@@ -48,13 +48,13 @@ module.exports = {
         if (!user) {
           return res.status(404).json({ message: 'No user found with that id' });
           Thought.deleteMany({ _id: {
-            $in: user.thoughts
+            $in: user.thoughts,
           }
           })
           .then(() => {
             res.json({ message: "user and associated thoughts deleted"});
           })
-          //.catch((err) => res.json(err));
+          .catch((err) => res.json(err));
           }
         }
           
@@ -77,35 +77,33 @@ module.exports = {
         console.log(err);
         res.status(500).json(err);
       }
-    
+    },
   
     // Add a friend
-    async.addFriend(req, res) {
+    async addFriend(req, res) {
       console.log('You are adding a friend');
       console.log(req.body);
     
-  
       try {
         const user= await User.findOneAndUpdate(
           { _id: req.params.userId },
           { $addToSet: { friends: req.body } },
           { runValidators: true, new: true }
-      );
-        
-        
+        );
+      
         if (!user) {
           return res
             .status(404)
             .json({ message: 'No user found with that ID' });
         }
-  
+      
         res.json(user);
       } catch (err) {
         res.status(500).json(err);
       }
-    }
+    },
     // Remove friend
-    async.removeFriend(req, res) {
+    async removeFriend(req, res) {
       try {
         const user = await User.findOneAndUpdate(
           { _id: req.params.userId },
@@ -118,15 +116,15 @@ module.exports = {
           return res
             .status(404)
             .json({ message: 'No user found with that ID :(' });
-        };
+        }
       
   
         res.json(user);
       } catch (err) {
         res.status(500).json(err);
-      };
-      };
-},
-};
+      }
+      }
+}
 
-module.exports = userController;
+
+//module.exports = userController;

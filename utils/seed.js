@@ -6,31 +6,42 @@ const { getRandomName, getRandomthoughts } = require('./data');
 //connection to mongodb
 connection.once('open', async () => {
   console.log('connected');
-    // Delete the collections if they exist
-    let thoughtCheck = await connection.db.listCollections({ name: 'thoughts' }).toArray();
+    try {
+      // Delete the collections if they exist
+      let thoughtCheck = await connection.db.listCollections({ name: 'thoughts' }).toArray();
     if (thoughtCheck.length) {
       await connection.dropCollection('thoughts');
     }
-
+    
     let usersCheck = await connection.db.listCollections({ name: 'users' }).toArray();
     if (usersCheck.length) {
       await connection.dropCollection('users');
-    }})
+    }
+    
+    // Create empty array to hold the users and thought
+    const users = [];
+    const thought = [];
+    // Add students to the collection and await the results
+    await User.collection.insertMany(users);
+    
+    // Add thoughts to the collection and await the results
+    await Thought.collection.insertMany(thought);
 
-  // Create empty array to hold the users and thought
-  const users = [];
-  const thought = [];
-  // Add students to the collection and await the results
-  await User.collection.insertMany(users);
-
-  // Add thoughts to the collection and await the results
-  await Thought.collection.insertMany(thought);
-
-
+    
+    console.info('Seeding ');
+    console.table(users);
+    console.table(thought);
+    process.exit(0);
+  } catch (err) {
+    console.error(err)  
+  }
+  })
+    
+  
 
   // Loop 20 times -- add users to the users array
  // for (let i = 0; i < 20; i++) {
-    // Get some random friends  using a helper function that we imported from ./data
+   // Get some random friends  using a helper function that we imported from ./data
    // const friends = getRandomFriends(20);
 
     //const fullName = getRandomName();
@@ -54,9 +65,5 @@ connection.once('open', async () => {
     
 
   // Log out the seed data to indicate what should appear in the database
-  console.table(users);
-  console.table(thought);
-  console.info('Seeding ');
-  process.exit(0);
 
   
