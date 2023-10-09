@@ -4,8 +4,8 @@ module.exports = {
     // Get all users
     async getUsers(req, res) {
       try {
-        const users = await User.find();
-  
+        const users = await User.find()
+         
         res.json(users);
       } catch (err) {
         console.log(err);
@@ -40,26 +40,22 @@ module.exports = {
         res.status(500).json(err);
       }
     },
+    //update a user
+    async updateUser(req, res) {
+      try {
+        const user = await User.findOneAndUpdate({ _id: req.params.userId }, req.body,{new: true, runValidators: true});
+        res.json(user);
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    },
     // Delete a user 
     async deleteUser(req, res) {
-      try {
+   
         const user = await User.findOneAndDelete({ _id: req.params.userId });
-  
-        if (!user) {
-          return res.status(404).json({ message: 'No user found with that id' });
-          Thought.deleteMany({ _id: {
-            $in: user.thoughts,
-          }
-          })
-          .then(() => {
-            res.json({ message: "user and associated thoughts deleted"});
-          })
-          .catch((err) => res.json(err));
-          }
-        }
-          
-        
-  
+        res.status(200).json({message:"success"})
+       
+    
         //const course = await Course.findOneAndUpdate(
          // { students: req.params.studentId },
          // { $pull: { students: req.params.studentId } },
@@ -70,13 +66,6 @@ module.exports = {
          // return res.status(404).json({
            // message: 'Student deleted, but no courses found',
           
-        
-  
-      
-       catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-      }
     },
   
     // Add a friend
@@ -125,6 +114,5 @@ module.exports = {
       }
       }
 }
-
 
 //module.exports = userController;
